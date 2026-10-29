@@ -40,7 +40,7 @@
   nav {
     position: fixed; top: 0; width: 100%; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
-    padding: 1rem 3rem;
+    padding: .8rem 3rem;
     background: rgba(15,15,15,.85);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
@@ -57,6 +57,19 @@
     font-size: .9rem; font-weight: 500; transition: color .2s;
   }
   nav a:hover, nav a.active { color: var(--gold); }
+  .nav-search {
+    width: min(360px, 32vw);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .55rem .85rem;
+    color: var(--text);
+    font: inherit;
+    font-size: .85rem;
+    outline: none;
+  }
+  .nav-search:focus { border-color: var(--wine-light); }
+  .nav-search::placeholder { color: var(--text-muted); }
   .nav-wallet {
     background: var(--wine); color: var(--text);
     border: none; padding: .55rem 1.2rem; border-radius: 8px;
@@ -65,36 +78,35 @@
   }
   .nav-wallet:hover { background: var(--wine-light); }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
+  /* ── INTRO ── */
+  .intro {
+    max-width: none;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8rem 2rem 4rem;
     text-align: center;
-    padding: 6rem 2rem 4rem;
     background:
-      radial-gradient(ellipse at 30% 20%, rgba(114,47,55,.25) 0%, transparent 60%),
-      radial-gradient(ellipse at 70% 80%, rgba(201,168,76,.1) 0%, transparent 50%);
+      radial-gradient(ellipse at 30% 20%, rgba(114,47,55,.2) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, rgba(201,168,76,.08) 0%, transparent 50%);
   }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: .5rem;
-    background: var(--bg-card); border: 1px solid var(--border);
-    padding: .4rem 1rem; border-radius: 999px;
-    font-size: .8rem; color: var(--gold); margin-bottom: 2rem;
-  }
-  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-  .hero h1 {
+  .intro h1 {
+    max-width: 720px;
+    margin-bottom: 1rem;
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 700; line-height: 1.15;
-    max-width: 800px; margin-bottom: 1.5rem;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 1.15;
   }
-  .hero h1 em { color: var(--gold); font-style: normal; }
-  .hero p {
-    font-size: 1.15rem; color: var(--text-muted);
-    max-width: 560px; margin-bottom: 2.5rem;
+  .intro h1 em { color: var(--gold); font-style: normal; }
+  .intro p {
+    max-width: 560px;
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+    font-size: 1rem;
   }
-  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
   .btn {
     padding: .75rem 2rem; border-radius: 8px;
     font-size: .95rem; font-weight: 600; cursor: pointer;
@@ -107,20 +119,6 @@
     border: 1px solid var(--border);
   }
   .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-
-  /* ── STATS BAR ── */
-  .stats-bar {
-    display: flex; justify-content: center; gap: 4rem;
-    padding: 2rem; border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-card);
-  }
-  .stat { text-align: center; }
-  .stat-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem; font-weight: 700; color: var(--gold);
-  }
-  .stat-label { font-size: .8rem; color: var(--text-muted); margin-top: .25rem; }
 
   /* ── SECTION STYLING ── */
   section { padding: 5rem 3rem; max-width: 1200px; margin: 0 auto; }
@@ -138,14 +136,6 @@
     position: relative; overflow: hidden; transition: border-color .3s;
   }
   .tier-card:hover { border-color: var(--wine-light); }
-  .tier-card.featured { border-color: var(--gold); }
-  .tier-card.featured::before {
-    content: 'MOST POPULAR';
-    position: absolute; top: 12px; right: -30px;
-    background: var(--gold); color: var(--bg);
-    font-size: .65rem; font-weight: 700; padding: .25rem 2.5rem;
-    transform: rotate(45deg);
-  }
   .tier-icon { font-size: 2rem; margin-bottom: 1rem; }
   .tier-name {
     font-family: 'Playfair Display', serif;
@@ -161,35 +151,6 @@
   .tier-features li.disabled { opacity: .35; }
   .tier-features li.disabled::before { content: '—'; color: var(--text-muted); }
 
-  /* ── BOTTLE GRID ── */
-  .bottle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-  .bottle-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden;
-    cursor: pointer; transition: all .3s;
-  }
-  .bottle-card:hover { border-color: var(--wine-light); transform: translateY(-4px); }
-  .bottle-img {
-    height: 220px;
-    background: var(--bg-elevated);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 5rem; position: relative;
-  }
-  .bottle-img .tier-badge {
-    position: absolute; top: 12px; right: 12px;
-    padding: .25rem .6rem; border-radius: 6px;
-    font-size: .7rem; font-weight: 600;
-  }
-  .tier-basic { background: rgba(76,175,80,.15); color: var(--green); }
-  .tier-plus { background: rgba(255,167,38,.15); color: var(--amber); }
-  .tier-premium { background: rgba(201,168,76,.15); color: var(--gold); }
-  .bottle-info { padding: 1.2rem; }
-  .bottle-name { font-weight: 600; margin-bottom: .25rem; }
-  .bottle-meta { font-size: .8rem; color: var(--text-muted); margin-bottom: .75rem; }
-  .bottle-status {
-    display: inline-flex; align-items: center; gap: .4rem;
-    font-size: .8rem; font-weight: 500;
-  }
   .status-dot {
     width: 7px; height: 7px; border-radius: 50%;
   }
@@ -304,68 +265,106 @@
   }
 
   /* ── RECENT OPENINGS ── */
+  .timeline-section {
+    max-width: none;
+    padding: 5.5rem max(3rem, calc((100% - 1200px) / 2)) 2.5rem;
+    background: linear-gradient(180deg, rgba(114,47,55,.08), transparent);
+    border-bottom: 1px solid var(--border);
+  }
+  .timeline-section .section-sub { margin-bottom: 1rem; }
   .opening-timeline {
     position: relative;
-    max-width: 860px;
-    padding-left: 2rem;
+    display: flex;
+    gap: .75rem;
+    overflow-x: auto;
+    padding: 1.75rem .25rem .5rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  .opening-timeline::-webkit-scrollbar { display: none; }
   .opening-timeline::before {
     content: '';
     position: absolute;
-    left: 52px;
-    top: 20px;
-    bottom: 20px;
-    width: 2px;
-    background: var(--border);
+    left: .25rem;
+    right: .25rem;
+    top: 1rem;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--wine-light), var(--border));
   }
   .opening-event {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1rem;
-    align-items: start;
+    flex: 0 0 220px;
+    min-height: 165px;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
+    border-radius: 10px;
+    padding: .8rem;
     cursor: pointer;
     transition: border-color .2s, transform .2s;
     position: relative;
-    margin-bottom: 1rem;
+    scroll-snap-align: start;
+    z-index: 1;
   }
-  .opening-event:last-child { margin-bottom: 0; }
+  .opening-event::before {
+    content: '';
+    position: absolute;
+    top: -1.45rem;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 2px var(--gold);
+    transform: translateX(-50%);
+  }
+  .opening-event::after {
+    content: '';
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    height: 1rem;
+    border-left: 1px solid rgba(201,168,76,.7);
+  }
   .opening-event:hover {
     border-color: var(--wine-light);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
   }
   .opening-event-marker {
-    width: 42px; height: 42px;
+    width: 32px; height: 32px;
     display: flex; align-items: center; justify-content: center;
     border-radius: 50%;
-    background: rgba(201,168,76,.12);
-    border: 1px solid var(--gold);
-    font-size: 1.35rem;
-    position: relative;
-    z-index: 1;
+    background: rgba(201,168,76,.08);
+    border: 1px solid var(--border);
+    font-size: 1rem;
   }
   .opening-event-date {
     color: var(--gold);
-    font-size: .75rem;
+    font-size: .68rem;
     font-weight: 600;
     letter-spacing: .3px;
     text-transform: uppercase;
-    margin-bottom: .2rem;
+    margin-bottom: .1rem;
   }
-  .opening-event-name { font-weight: 600; }
+  .opening-event-name { font-weight: 600; font-size: .9rem; }
   .opening-event-meta {
     color: var(--text-muted);
-    font-size: .82rem;
-    margin-top: .25rem;
+    font-size: .75rem;
+    margin-top: .15rem;
   }
   .opening-event-note {
     color: var(--text-muted);
-    font-size: .85rem;
-    margin-top: .65rem;
+    font-size: .75rem;
+    margin-top: .4rem;
     line-height: 1.45;
+  }
+  .opening-event-status {
+    margin-top: auto;
+    font-size: .7rem;
+    font-weight: 600;
   }
   .opening-event-link {
     color: var(--wine-light);
@@ -415,8 +414,9 @@
   @media (max-width: 768px) {
     nav { padding: 1rem; }
     nav ul { display: none; }
+    .nav-search { width: min(260px, 52vw); }
     section { padding: 3rem 1.5rem; }
-    .stats-bar { gap: 2rem; flex-wrap: wrap; }
+    .timeline-section { padding: 5.5rem 1.5rem 2rem; }
     .modal { padding: 1.5rem; }
     .modal-header { flex-direction: column; }
   }
@@ -427,38 +427,21 @@
 <!-- ═══════ NAV ═══════ -->
 <nav>
   <div class="logo">Vin<span>Chain</span></div>
-  <ul>
-    <a href="#bottles" class="active">Bottles</a>
-    <a href="#opening-timeline">Memories</a>
-    <a href="#tiers-section">Collector tiers</a>
-    <a href="#">Verify</a>
-  </ul>
+  <input class="nav-search" id="searchInput" type="search" aria-label="Search bottles" placeholder="Search bottles…" />
   <button class="nav-wallet" onclick="alert('Wallet connection coming soon — this is a prototype!')">Connect Wallet</button>
 </nav>
 
-<!-- ═══════ HERO ═══════ -->
-<section class="hero">
-  <div class="hero-badge"><span class="dot"></span> A permanent memory for every bottle</div>
-  <h1 class="animate">Remember the moment it was <em>opened</em></h1>
-  <p class="animate delay-1">Capture the time, place, and feeling behind a bottle. Leave a note, pin the GPS, and make the memory permanent on-chain — with deep collector data only when the bottle deserves it.</p>
-  <div class="hero-actions animate delay-2">
-    <a href="#bottles" class="btn btn-primary">Explore bottle memories</a>
-    <a href="#tiers-section" class="btn btn-outline">See what gets tracked</a>
-  </div>
+<!-- ═══════ INTRO ═══════ -->
+<section class="intro">
+  <h1>Remember the moment it was <em>opened</em></h1>
+  <p>Capture the time, place, and feeling behind a bottle. Leave a note, pin the GPS, and make the memory permanent on-chain.</p>
+  <a href="#opening-timeline" class="btn btn-primary">Explore the bottle timeline</a>
 </section>
 
-<!-- ═══════ STATS ═══════ -->
-<div class="stats-bar">
-  <div class="stat"><div class="stat-value">2,481</div><div class="stat-label">Opening memories</div></div>
-  <div class="stat"><div class="stat-value">8,904</div><div class="stat-label">Notes preserved</div></div>
-  <div class="stat"><div class="stat-value">76</div><div class="stat-label">Countries shared</div></div>
-  <div class="stat"><div class="stat-value">100%</div><div class="stat-label">Permanent records</div></div>
-</div>
-
-<!-- ═══════ RECENT OPENINGS ═══════ -->
-<section id="opening-timeline">
-  <h2 class="section-title">Recently opened</h2>
-  <p class="section-sub">A living timeline of the latest bottles whose memories were recorded on-chain.</p>
+<!-- ═══════ BOTTLE TIMELINE ═══════ -->
+<section id="opening-timeline" class="timeline-section">
+  <h2 class="section-title">Bottle timeline</h2>
+  <p class="section-sub">A simple view of every bottle in the collection, from its latest recorded moment.</p>
   <div class="opening-timeline" id="openingTimeline">
     <!-- Opening events injected by JS -->
   </div>
@@ -466,8 +449,8 @@
 
 <!-- ═══════ SENSOR TIERS ═══════ -->
 <section id="tiers-section">
-  <h2 class="section-title">The memory is for everyone. The detail is for collectors.</h2>
-  <p class="section-sub">Every bottle gets an opening record. Only serious, high-value bottles carry the full environmental trail.</p>
+  <h2 class="section-title">Choose the level of detail</h2>
+  <p class="section-sub">Every bottle gets a memory. Add protection and environmental history when you need it.</p>
   <div class="tiers">
     <!-- Basic -->
     <div class="tier-card">
@@ -483,7 +466,7 @@
       </ul>
     </div>
     <!-- Plus -->
-    <div class="tier-card featured">
+    <div class="tier-card">
       <div class="tier-icon">🥈</div>
       <div class="tier-name">Protection</div>
       <div class="tier-price">For valuable bottles</div>
@@ -508,24 +491,6 @@
         <li>Detailed opening memory history</li>
       </ul>
     </div>
-  </div>
-</section>
-
-<!-- ═══════ BOTTLE EXPLORER ═══════ -->
-<section id="bottles">
-  <h2 class="section-title">Bottle memories</h2>
-  <p class="section-sub">Open a record to relive the occasion, verify where it happened, and see the level of detail preserved.</p>
-
-  <div class="search-wrapper">
-    <input class="search-input" id="searchInput" placeholder="Search by bottle, winery, vintage, or memory…" />
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="sealed">Sealed</button>
-    <button class="filter-btn" data-filter="opened">Opened</button>
-    <button class="filter-btn" data-filter="alert">Alert</button>
-  </div>
-
-  <div class="bottle-grid" id="bottleGrid">
-    <!-- Cards injected by JS -->
   </div>
 </section>
 
@@ -685,85 +650,49 @@ const bottles = [
   }
 ];
 
-// ── RENDER BOTTLE CARDS ──
-const grid = document.getElementById('bottleGrid');
+// ── BOTTLE TIMELINE ──
+const openingTimeline = document.getElementById('openingTimeline');
+const timelineBottles = [...bottles].sort((a, b) => {
+  const latest = bottle => bottle.openedAt || bottle.events[0]?.time || '';
+  return new Date(latest(b).replace('·', '')).getTime() - new Date(latest(a).replace('·', '')).getTime();
+});
 
-let activeFilter = 'all';
-let searchTerm = '';
-
-function renderCards(filter = activeFilter) {
-  activeFilter = filter;
-  grid.innerHTML = '';
-  const filtered = bottles.filter(b => {
-    const matchesFilter = filter === 'all' || b.status === filter;
+function renderTimeline(searchTerm = '') {
+  openingTimeline.innerHTML = '';
+  const filtered = timelineBottles.filter(b => {
     const haystack = `${b.id} ${b.name} ${b.winery} ${b.vintage} ${b.openingNote || ''}`.toLowerCase();
-    return matchesFilter && haystack.includes(searchTerm);
+    return haystack.includes(searchTerm);
   });
+
   if (!filtered.length) {
-    grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;">No bottle memories match that search.</p>';
+    openingTimeline.innerHTML = '<p style="color:var(--text-muted);">No bottles match that search.</p>';
     return;
   }
+
   filtered.forEach((b, i) => {
-    const card = document.createElement('div');
-    card.className = `bottle-card animate delay-${(i % 3) + 1}`;
-    card.onclick = () => openModal(b);
-    card.innerHTML = `
-      <div class="bottle-img">
-        ${b.emoji}
-        <span class="tier-badge tier-${b.tier}">${b.tierLabel}</span>
-      </div>
-      <div class="bottle-info">
-        <div class="bottle-name">${b.name}</div>
-        <div class="bottle-meta">${b.winery} · ${b.id}</div>
-        <div class="bottle-status status-${b.status}">
-          <span class="status-dot"></span>
-          ${b.status.charAt(0).toUpperCase() + b.status.slice(1)}
-        </div>
-      </div>`;
-    grid.appendChild(card);
-  });
-}
-renderCards();
-
-// ── RECENT OPENINGS TIMELINE ──
-const openingTimeline = document.getElementById('openingTimeline');
-const recentlyOpened = bottles
-  .filter(b => b.openedAt)
-  .sort((a, b) => new Date(b.openedAt.replace('·', '')) - new Date(a.openedAt.replace('·', '')));
-
-if (!recentlyOpened.length) {
-  openingTimeline.innerHTML = '<p style="color:var(--text-muted);">No bottles have been opened recently.</p>';
-}
-
-recentlyOpened.forEach((b, i) => {
   const event = document.createElement('article');
   event.className = 'opening-event animate';
   event.style.animationDelay = `${i * 0.1}s`;
   event.onclick = () => openModal(b);
+  const date = b.openedAt || b.events[0]?.time || 'No date recorded';
+  const location = b.openedLocation || 'In collection · opening not yet recorded';
   event.innerHTML = `
     <div class="opening-event-marker">${b.emoji}</div>
     <div>
-      <div class="opening-event-date">${b.openedAt}</div>
+      <div class="opening-event-date">${date}</div>
       <div class="opening-event-name">${b.name}</div>
-      <div class="opening-event-meta">${b.winery} · ${b.openedLocation}</div>
-      <div class="opening-event-note">“${b.openingNote}”</div>
+      <div class="opening-event-meta">${b.winery}</div>
+      <div class="opening-event-note">${location}</div>
       <div class="opening-event-link">View bottle memory →</div>
-    </div>`;
+    </div>
+    <div class="opening-event-status status-${b.status}"><span class="status-dot"></span> ${b.status}</div>`;
   openingTimeline.appendChild(event);
-});
-
-// ── FILTERS ──
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderCards(btn.dataset.filter);
   });
-});
+}
+renderTimeline();
 
 document.getElementById('searchInput').addEventListener('input', e => {
-  searchTerm = e.target.value.trim().toLowerCase();
-  renderCards();
+  renderTimeline(e.target.value.trim().toLowerCase());
 });
 
 // ── MODAL ──
