@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VinChain — The Moment a Bottle Was Opened</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+
+  :root {
+    --wine: #722F37;
+    --wine-light: #9B4D54;
+    --wine-dark: #4A1C22;
+    --gold: #C9A84C;
+    --gold-light: #E8D49A;
+    --bg: #0F0F0F;
+    --bg-card: #1A1A1A;
+    --bg-elevated: #242424;
+    --text: #F0EDE6;
+    --text-muted: #8A857D;
+    --border: #2A2A2A;
+    --green: #4CAF50;
+    --amber: #FFA726;
+    --red: #EF5350;
+    --blue: #42A5F5;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 3rem;
+    background: rgba(15,15,15,.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700; color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .logo span { color: var(--text); font-weight: 400; }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: .9rem; font-weight: 500; transition: color .2s;
+  }
+  nav a:hover, nav a.active { color: var(--gold); }
+  .nav-wallet {
+    background: var(--wine); color: var(--text);
+    border: none; padding: .55rem 1.2rem; border-radius: 8px;
+    font-size: .85rem; font-weight: 500; cursor: pointer;
+    transition: background .2s;
+  }
+  .nav-wallet:hover { background: var(--wine-light); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(114,47,55,.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, rgba(201,168,76,.1) 0%, transparent 50%);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    padding: .4rem 1rem; border-radius: 999px;
+    font-size: .8rem; color: var(--gold); margin-bottom: 2rem;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700; line-height: 1.15;
+    max-width: 800px; margin-bottom: 1.5rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero p {
+    font-size: 1.15rem; color: var(--text-muted);
+    max-width: 560px; margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    padding: .75rem 2rem; border-radius: 8px;
+    font-size: .95rem; font-weight: 600; cursor: pointer;
+    border: none; transition: all .2s; text-decoration: none;
+  }
+  .btn-primary { background: var(--wine); color: #fff; }
+  .btn-primary:hover { background: var(--wine-light); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 4rem;
+    padding: 2rem; border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card);
+  }
+  .stat { text-align: center; }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--gold);
+  }
+  .stat-label { font-size: .8rem; color: var(--text-muted); margin-top: .25rem; }
+
+  /* ── SECTION STYLING ── */
+  section { padding: 5rem 3rem; max-width: 1200px; margin: 0 auto; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; margin-bottom: .5rem;
+  }
+  .section-sub { color: var(--text-muted); margin-bottom: 3rem; font-size: 1rem; }
+
+  /* ── SENSOR TIERS ── */
+  .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .tier-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem;
+    position: relative; overflow: hidden; transition: border-color .3s;
+  }
+  .tier-card:hover { border-color: var(--wine-light); }
+  .tier-card.featured { border-color: var(--gold); }
+  .tier-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute; top: 12px; right: -30px;
+    background: var(--gold); color: var(--bg);
+    font-size: .65rem; font-weight: 700; padding: .25rem 2.5rem;
+    transform: rotate(45deg);
+  }
+  .tier-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .tier-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; margin-bottom: .25rem;
+  }
+  .tier-price { color: var(--gold); font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+  .tier-features { list-style: none; }
+  .tier-features li {
+    padding: .4rem 0; font-size: .9rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .tier-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+  .tier-features li.disabled { opacity: .35; }
+  .tier-features li.disabled::before { content: '—'; color: var(--text-muted); }
+
+  /* ── BOTTLE GRID ── */
+  .bottle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .bottle-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    cursor: pointer; transition: all .3s;
+  }
+  .bottle-card:hover { border-color: var(--wine-light); transform: translateY(-4px); }
+  .bottle-img {
+    height: 220px;
+    background: var(--bg-elevated);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; position: relative;
+  }
+  .bottle-img .tier-badge {
+    position: absolute; top: 12px; right: 12px;
+    padding: .25rem .6rem; border-radius: 6px;
+    font-size: .7rem; font-weight: 600;
+  }
+  .tier-basic { background: rgba(76,175,80,.15); color: var(--green); }
+  .tier-plus { background: rgba(255,167,38,.15); color: var(--amber); }
+  .tier-premium { background: rgba(201,168,76,.15); color: var(--gold); }
+  .bottle-info { padding: 1.2rem; }
+  .bottle-name { font-weight: 600; margin-bottom: .25rem; }
+  .bottle-meta { font-size: .8rem; color: var(--text-muted); margin-bottom: .75rem; }
+  .bottle-status {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-size: .8rem; font-weight: 500;
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .status-sealed .status-dot { background: var(--green); }
+  .status-sealed { color: var(--green); }
+  .status-opened .status-dot { background: var(--amber); }
+  .status-opened { color: var(--amber); }
+  .status-alert .status-dot { background: var(--red); }
+  .status-alert { color: var(--red); }
+
+  /* ── DETAIL VIEW (MODAL) ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,.7); backdrop-filter: blur(8px);
+    justify-content: center; align-items: flex-start;
+    padding: 5rem 1rem; overflow-y: auto;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 16px; width: 100%; max-width: 720px;
+    padding: 2.5rem; position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1.2rem;
+    background: none; border: none; color: var(--text-muted);
+    font-size: 1.5rem; cursor: pointer;
+  }
+  .modal-header { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: flex-start; }
+  .modal-bottle-icon {
+    width: 80px; height: 80px; border-radius: 12px;
+    background: var(--bg-elevated);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; flex-shrink: 0;
+  }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; }
+  .modal-subtitle { color: var(--text-muted); font-size: .9rem; }
+  .modal-hash {
+    font-family: monospace; font-size: .75rem;
+    color: var(--wine-light); margin-top: .4rem;
+    word-break: break-all;
+  }
+
+  /* sensor readings grid */
+  .readings-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: .75rem; margin-bottom: 2rem;
+  }
+  .reading-card {
+    background: var(--bg-elevated); border-radius: 10px;
+    padding: 1rem; text-align: center;
+  }
+  .reading-label { font-size: .7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
+  .reading-value { font-size: 1.3rem; font-weight: 700; margin: .3rem 0; }
+  .reading-unit { font-size: .75rem; color: var(--text-muted); }
+  .reading-ok .reading-value { color: var(--green); }
+  .reading-warn .reading-value { color: var(--amber); }
+  .reading-danger .reading-value { color: var(--red); }
+
+  /* opening memory */
+  .memory-card {
+    background: linear-gradient(135deg, rgba(114,47,55,.3), rgba(201,168,76,.08));
+    border: 1px solid var(--wine-light); border-radius: 12px;
+    padding: 1.25rem; margin-bottom: 2rem;
+  }
+  .memory-kicker {
+    color: var(--gold); font-size: .7rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: .35rem;
+  }
+  .memory-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; }
+  .memory-meta { color: var(--text-muted); font-size: .85rem; margin-top: .35rem; }
+  .memory-note { margin-top: .85rem; font-size: .95rem; line-height: 1.55; }
+  .memory-form {
+    border-top: 1px solid rgba(255,255,255,.1); margin-top: 1rem; padding-top: 1rem;
+  }
+  .memory-form label { display: block; color: var(--text-muted); font-size: .8rem; margin-bottom: .4rem; }
+  .memory-input {
+    width: 100%; background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 8px; padding: .7rem .8rem; color: var(--text);
+    font: inherit; resize: vertical; min-height: 72px; outline: none;
+  }
+  .memory-input:focus { border-color: var(--gold); }
+  .memory-form .btn { margin-top: .65rem; padding: .6rem 1rem; font-size: .85rem; }
+  .collector-only {
+    color: var(--gold); font-size: .75rem; margin-bottom: .75rem;
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .collector-only::before { content: '✦'; }
+
+  /* timeline */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-event { position: relative; margin-bottom: 1.5rem; }
+  .tl-dot {
+    position: absolute; left: -2rem; top: .35rem;
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--bg-card);
+  }
+  .tl-event.event-good .tl-dot { border-color: var(--green); background: rgba(76,175,80,.2); }
+  .tl-event.event-warn .tl-dot { border-color: var(--amber); background: rgba(255,167,38,.2); }
+  .tl-event.event-bad .tl-dot { border-color: var(--red); background: rgba(239,83,80,.2); }
+  .tl-event.event-info .tl-dot { border-color: var(--blue); background: rgba(66,165,245,.2); }
+  .tl-time { font-size: .75rem; color: var(--text-muted); margin-bottom: .2rem; }
+  .tl-title { font-weight: 600; font-size: .95rem; }
+  .tl-desc { font-size: .85rem; color: var(--text-muted); }
+  .tl-tx {
+    font-family: monospace; font-size: .7rem;
+    color: var(--wine-light); margin-top: .3rem;
+  }
+
+  /* ── RECENT OPENINGS ── */
+  .opening-timeline {
+    position: relative;
+    max-width: 860px;
+    padding-left: 2rem;
+  }
+  .opening-timeline::before {
+    content: '';
+    position: absolute;
+    left: 52px;
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+    background: var(--border);
+  }
+  .opening-event {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: start;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: border-color .2s, transform .2s;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  .opening-event:last-child { margin-bottom: 0; }
+  .opening-event:hover {
+    border-color: var(--wine-light);
+    transform: translateY(-2px);
+  }
+  .opening-event-marker {
+    width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: rgba(201,168,76,.12);
+    border: 1px solid var(--gold);
+    font-size: 1.35rem;
+    position: relative;
+    z-index: 1;
+  }
+  .opening-event-date {
+    color: var(--gold);
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    margin-bottom: .2rem;
+  }
+  .opening-event-name { font-weight: 600; }
+  .opening-event-meta {
+    color: var(--text-muted);
+    font-size: .82rem;
+    margin-top: .25rem;
+  }
+  .opening-event-note {
+    color: var(--text-muted);
+    font-size: .85rem;
+    margin-top: .65rem;
+    line-height: 1.45;
+  }
+  .opening-event-link {
+    color: var(--wine-light);
+    font-size: .75rem;
+    margin-top: .7rem;
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-wrapper {
+    display: flex; gap: .75rem; margin-bottom: 2rem; flex-wrap: wrap;
+  }
+  .search-input {
+    flex: 1; min-width: 250px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 10px; padding: .75rem 1.2rem;
+    color: var(--text); font-size: .95rem;
+    outline: none; transition: border-color .2s;
+  }
+  .search-input:focus { border-color: var(--wine-light); }
+  .search-input::placeholder { color: var(--text-muted); }
+  .filter-btn {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 10px; padding: .5rem 1rem;
+    color: var(--text-muted); font-size: .85rem; cursor: pointer;
+    transition: all .2s;
+  }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--gold); color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 3rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted); font-size: .85rem;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate { animation: fadeUp .5s ease-out both; }
+  .delay-1 { animation-delay: .1s; }
+  .delay-2 { animation-delay: .2s; }
+  .delay-3 { animation-delay: .3s; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem; }
+    nav ul { display: none; }
+    section { padding: 3rem 1.5rem; }
+    .stats-bar { gap: 2rem; flex-wrap: wrap; }
+    .modal { padding: 1.5rem; }
+    .modal-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ NAV ═══════ -->
+<nav>
+  <div class="logo">Vin<span>Chain</span></div>
+  <ul>
+    <a href="#bottles" class="active">Bottles</a>
+    <a href="#opening-timeline">Memories</a>
+    <a href="#tiers-section">Collector tiers</a>
+    <a href="#">Verify</a>
+  </ul>
+  <button class="nav-wallet" onclick="alert('Wallet connection coming soon — this is a prototype!')">Connect Wallet</button>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+  <div class="hero-badge"><span class="dot"></span> A permanent memory for every bottle</div>
+  <h1 class="animate">Remember the moment it was <em>opened</em></h1>
+  <p class="animate delay-1">Capture the time, place, and feeling behind a bottle. Leave a note, pin the GPS, and make the memory permanent on-chain — with deep collector data only when the bottle deserves it.</p>
+  <div class="hero-actions animate delay-2">
+    <a href="#bottles" class="btn btn-primary">Explore bottle memories</a>
+    <a href="#tiers-section" class="btn btn-outline">See what gets tracked</a>
+  </div>
+</section>
+
+<!-- ═══════ STATS ═══════ -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-value">2,481</div><div class="stat-label">Opening memories</div></div>
+  <div class="stat"><div class="stat-value">8,904</div><div class="stat-label">Notes preserved</div></div>
+  <div class="stat"><div class="stat-value">76</div><div class="stat-label">Countries shared</div></div>
+  <div class="stat"><div class="stat-value">100%</div><div class="stat-label">Permanent records</div></div>
+</div>
+
+<!-- ═══════ RECENT OPENINGS ═══════ -->
+<section id="opening-timeline">
+  <h2 class="section-title">Recently opened</h2>
+  <p class="section-sub">A living timeline of the latest bottles whose memories were recorded on-chain.</p>
+  <div class="opening-timeline" id="openingTimeline">
+    <!-- Opening events injected by JS -->
+  </div>
+</section>
+
+<!-- ═══════ SENSOR TIERS ═══════ -->
+<section id="tiers-section">
+  <h2 class="section-title">The memory is for everyone. The detail is for collectors.</h2>
+  <p class="section-sub">Every bottle gets an opening record. Only serious, high-value bottles carry the full environmental trail.</p>
+  <div class="tiers">
+    <!-- Basic -->
+    <div class="tier-card">
+      <div class="tier-icon">🥉</div>
+      <div class="tier-name">Memory</div>
+      <div class="tier-price">For every bottle</div>
+      <ul class="tier-features">
+        <li>Opening timestamp on-chain</li>
+        <li>Personal note and occasion</li>
+        <li>Opening GPS location</li>
+        <li>Shareable memory page</li>
+        <li class="disabled">Continuous environment trail</li>
+      </ul>
+    </div>
+    <!-- Plus -->
+    <div class="tier-card featured">
+      <div class="tier-icon">🥈</div>
+      <div class="tier-name">Protection</div>
+      <div class="tier-price">For valuable bottles</div>
+      <ul class="tier-features">
+        <li>Everything in Memory</li>
+        <li>Tamper & tilt detection</li>
+        <li>Seal integrity alerts</li>
+        <li>Custody transfers</li>
+        <li class="disabled">Temperature and humidity history</li>
+      </ul>
+    </div>
+    <!-- Premium -->
+    <div class="tier-card">
+      <div class="tier-icon">🥇</div>
+      <div class="tier-name">Collector Archive</div>
+      <div class="tier-price">For serious bottles</div>
+      <ul class="tier-features">
+        <li>Everything in Protection</li>
+        <li>Temperature, humidity, light, vibration</li>
+        <li>Full GPS and custody trail</li>
+        <li>Collector-grade provenance archive</li>
+        <li>Detailed opening memory history</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ BOTTLE EXPLORER ═══════ -->
+<section id="bottles">
+  <h2 class="section-title">Bottle memories</h2>
+  <p class="section-sub">Open a record to relive the occasion, verify where it happened, and see the level of detail preserved.</p>
+
+  <div class="search-wrapper">
+    <input class="search-input" id="searchInput" placeholder="Search by bottle, winery, vintage, or memory…" />
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="sealed">Sealed</button>
+    <button class="filter-btn" data-filter="opened">Opened</button>
+    <button class="filter-btn" data-filter="alert">Alert</button>
+  </div>
+
+  <div class="bottle-grid" id="bottleGrid">
+    <!-- Cards injected by JS -->
+  </div>
+</section>
+
+<!-- ═══════ DETAIL MODAL ═══════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalBody"><!-- filled by JS --></div>
+  </div>
+</div>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <p>VinChain Prototype · Built for demo purposes · Smart contract on <a href="#">Polygon</a></p>
+  <p style="margin-top:.4rem;font-size:.75rem;">Contract: 0x7a3f…e91b · Subgraph: vinchain/mainnet-v2</p>
+</footer>
+
+<!-- ═══════════════════════ JS ═══════════════════════ -->
+<script>
+// ── MOCK DATA ──
+const bottles = [
+  {
+    id: "VIN-00482",
+    name: "Château Margaux 2018",
+    winery: "Château Margaux · Bordeaux",
+    vintage: 2018,
+    tier: "premium",
+    tierLabel: "Collector Archive",
+    status: "sealed",
+    emoji: "🍷",
+    hash: "0x7a3f1c9e482b…d8e91b",
+    readings: [
+      { label: "Temperature", value: "14.2", unit: "°C", state: "ok" },
+      { label: "Humidity", value: "68", unit: "%", state: "ok" },
+      { label: "Light Exp.", value: "12", unit: "lux", state: "ok" },
+      { label: "Vibration", value: "0.03", unit: "g", state: "ok" },
+      { label: "Seal", value: "OK", unit: "", state: "ok" },
+      { label: "Tilt", value: "1.2", unit: "°", state: "ok" }
+    ],
+    events: [
+      { time: "Oct 27, 2026 · 14:22", title: "Environment check", desc: "Temp 14.2°C · Humidity 68% · Light 12 lux", type: "info", tx: "0xab12…f482" },
+      { time: "Oct 25, 2026 · 09:10", title: "GPS location updated", desc: "Wine cellar, 48.8566°N 2.3522°E (Paris)", type: "info", tx: "0xcd34…a910" },
+      { time: "Oct 18, 2026 · 11:45", title: "Custody transfer", desc: "From Bordeaux Distribution → Caves de Paris", type: "good", tx: "0xef56…c118" },
+      { time: "Sep 30, 2026 · 08:00", title: "Bottled & sealed", desc: "Sensor activated · FullSpectrum tier registered", type: "good", tx: "0x1234…0930" }
+    ]
+  },
+  {
+    id: "VIN-01055",
+    name: "Opus One 2019",
+    winery: "Opus One · Napa Valley",
+    vintage: 2019,
+    tier: "plus",
+    tierLabel: "Protection",
+    status: "alert",
+    emoji: "🍷",
+    hash: "0x92c4d1ab73…5f10e2",
+    readings: [
+      { label: "Seal", value: "WARN", unit: "", state: "warn" },
+      { label: "Tilt", value: "34.7", unit: "°", state: "danger" },
+      { label: "Tamper", value: "YES", unit: "", state: "danger" }
+    ],
+    events: [
+      { time: "Oct 27, 2026 · 22:04", title: "⚠ Tamper detected", desc: "Seal integrity compromised — capsule pressure anomaly", type: "bad", tx: "0xfa82…2204" },
+      { time: "Oct 27, 2026 · 22:01", title: "⚠ Unusual tilt", desc: "Bottle tilted 34.7° for > 60 seconds", type: "warn", tx: "0xfb83…2201" },
+      { time: "Oct 20, 2026 · 15:30", title: "Custody transfer", desc: "From Napa Direct → London Fine Wines Ltd", type: "good", tx: "0xab00…1530" },
+      { time: "Aug 12, 2026 · 10:00", title: "Bottled & sealed", desc: "Sensor activated · GuardCork tier registered", type: "good", tx: "0x5678…0812" }
+    ]
+  },
+  {
+    id: "VIN-02198",
+    name: "Penfolds Grange 2017",
+    winery: "Penfolds · South Australia",
+    vintage: 2017,
+    tier: "basic",
+    tierLabel: "Memory",
+    status: "opened",
+    emoji: "🍷",
+    hash: "0x3e8b0f14a7…c299d4",
+    openedAt: "Oct 26, 2026 · 20:15",
+    openedLocation: "The Harbour Room, Sydney · 33.8688°S 151.2093°E",
+    openingNote: "A toast to the end of a long project — shared with the people who made it possible.",
+    readings: [
+      { label: "Seal", value: "OPEN", unit: "", state: "warn" }
+    ],
+    events: [
+      { time: "Oct 26, 2026 · 20:15", title: "Bottle opened", desc: "Seal broken — cork removed detected · GPS pinned at The Harbour Room, Sydney", type: "warn", tx: "0xcc11…2015" },
+      { time: "Jun 01, 2026 · 14:00", title: "Bottled & sealed", desc: "Sensor activated · SealWatch tier registered", type: "good", tx: "0x9abc…0601" }
+    ]
+  },
+  {
+    id: "VIN-03371",
+    name: "Sassicaia 2020",
+    winery: "Tenuta San Guido · Tuscany",
+    vintage: 2020,
+    tier: "premium",
+    tierLabel: "Collector Archive",
+    status: "sealed",
+    emoji: "🍷",
+    hash: "0x11df44ca82…e7b301",
+    readings: [
+      { label: "Temperature", value: "15.8", unit: "°C", state: "ok" },
+      { label: "Humidity", value: "72", unit: "%", state: "ok" },
+      { label: "Light Exp.", value: "3", unit: "lux", state: "ok" },
+      { label: "Vibration", value: "0.01", unit: "g", state: "ok" },
+      { label: "Seal", value: "OK", unit: "", state: "ok" },
+      { label: "Tilt", value: "0.4", unit: "°", state: "ok" }
+    ],
+    events: [
+      { time: "Oct 28, 2026 · 06:00", title: "Environment check", desc: "Temp 15.8°C · Humidity 72% · Light 3 lux", type: "info", tx: "0xaa00…0600" },
+      { time: "Oct 22, 2026 · 12:00", title: "GPS location updated", desc: "Enoteca cellar, 43.3°N 10.8°E (Bolgheri)", type: "info", tx: "0xbb11…1200" },
+      { time: "Oct 10, 2026 · 09:30", title: "Bottled & sealed", desc: "Sensor activated · FullSpectrum tier registered", type: "good", tx: "0xcc22…0930" }
+    ]
+  },
+  {
+    id: "VIN-04450",
+    name: "Vega Sicilia Único 2015",
+    winery: "Vega Sicilia · Ribera del Duero",
+    vintage: 2015,
+    tier: "plus",
+    tierLabel: "Protection",
+    status: "sealed",
+    emoji: "🍷",
+    hash: "0x58ef0b239c…14ad77",
+    readings: [
+      { label: "Seal", value: "OK", unit: "", state: "ok" },
+      { label: "Tilt", value: "0.8", unit: "°", state: "ok" },
+      { label: "Tamper", value: "NO", unit: "", state: "ok" }
+    ],
+    events: [
+      { time: "Oct 27, 2026 · 18:00", title: "Integrity check passed", desc: "Seal intact · No anomalies", type: "good", tx: "0xdd33…1800" },
+      { time: "Jul 15, 2026 · 10:00", title: "Bottled & sealed", desc: "Sensor activated · GuardCork tier registered", type: "good", tx: "0xee44…0715" }
+    ]
+  },
+  {
+    id: "VIN-05612",
+    name: "Dom Pérignon 2012",
+    winery: "Moët & Chandon · Champagne",
+    vintage: 2012,
+    tier: "premium",
+    tierLabel: "Collector Archive",
+    status: "sealed",
+    emoji: "🥂",
+    hash: "0xc4a019de72…88f105",
+    readings: [
+      { label: "Temperature", value: "10.1", unit: "°C", state: "ok" },
+      { label: "Humidity", value: "80", unit: "%", state: "ok" },
+      { label: "Light Exp.", value: "0", unit: "lux", state: "ok" },
+      { label: "Vibration", value: "0.00", unit: "g", state: "ok" },
+      { label: "Seal", value: "OK", unit: "", state: "ok" },
+      { label: "Tilt", value: "0.1", unit: "°", state: "ok" }
+    ],
+    events: [
+      { time: "Oct 28, 2026 · 07:30", title: "Environment check", desc: "Temp 10.1°C · Humidity 80% · Perfect cellar conditions", type: "info", tx: "0xff55…0730" },
+      { time: "Oct 15, 2026 · 11:00", title: "Custody transfer", desc: "From Épernay Caves → Private Collection, Zürich", type: "good", tx: "0x0066…1100" },
+      { time: "Mar 01, 2026 · 09:00", title: "Bottled & sealed", desc: "Sensor activated · FullSpectrum tier registered", type: "good", tx: "0x1177…0301" }
+    ]
+  }
+];
+
+// ── RENDER BOTTLE CARDS ──
+const grid = document.getElementById('bottleGrid');
+
+let activeFilter = 'all';
+let searchTerm = '';
+
+function renderCards(filter = activeFilter) {
+  activeFilter = filter;
+  grid.innerHTML = '';
+  const filtered = bottles.filter(b => {
+    const matchesFilter = filter === 'all' || b.status === filter;
+    const haystack = `${b.id} ${b.name} ${b.winery} ${b.vintage} ${b.openingNote || ''}`.toLowerCase();
+    return matchesFilter && haystack.includes(searchTerm);
+  });
+  if (!filtered.length) {
+    grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;">No bottle memories match that search.</p>';
+    return;
+  }
+  filtered.forEach((b, i) => {
+    const card = document.createElement('div');
+    card.className = `bottle-card animate delay-${(i % 3) + 1}`;
+    card.onclick = () => openModal(b);
+    card.innerHTML = `
+      <div class="bottle-img">
+        ${b.emoji}
+        <span class="tier-badge tier-${b.tier}">${b.tierLabel}</span>
+      </div>
+      <div class="bottle-info">
+        <div class="bottle-name">${b.name}</div>
+        <div class="bottle-meta">${b.winery} · ${b.id}</div>
+        <div class="bottle-status status-${b.status}">
+          <span class="status-dot"></span>
+          ${b.status.charAt(0).toUpperCase() + b.status.slice(1)}
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+renderCards();
+
+// ── RECENT OPENINGS TIMELINE ──
+const openingTimeline = document.getElementById('openingTimeline');
+const recentlyOpened = bottles
+  .filter(b => b.openedAt)
+  .sort((a, b) => new Date(b.openedAt.replace('·', '')) - new Date(a.openedAt.replace('·', '')));
+
+if (!recentlyOpened.length) {
+  openingTimeline.innerHTML = '<p style="color:var(--text-muted);">No bottles have been opened recently.</p>';
+}
+
+recentlyOpened.forEach((b, i) => {
+  const event = document.createElement('article');
+  event.className = 'opening-event animate';
+  event.style.animationDelay = `${i * 0.1}s`;
+  event.onclick = () => openModal(b);
+  event.innerHTML = `
+    <div class="opening-event-marker">${b.emoji}</div>
+    <div>
+      <div class="opening-event-date">${b.openedAt}</div>
+      <div class="opening-event-name">${b.name}</div>
+      <div class="opening-event-meta">${b.winery} · ${b.openedLocation}</div>
+      <div class="opening-event-note">“${b.openingNote}”</div>
+      <div class="opening-event-link">View bottle memory →</div>
+    </div>`;
+  openingTimeline.appendChild(event);
+});
+
+// ── FILTERS ──
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCards(btn.dataset.filter);
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderCards();
+});
+
+// ── MODAL ──
+function openModal(b) {
+  const overlay = document.getElementById('modalOverlay');
+  const body = document.getElementById('modalBody');
+
+  const readingsHTML = b.readings.map(r => `
+    <div class="reading-card reading-${r.state}">
+      <div class="reading-label">${r.label}</div>
+      <div class="reading-value">${r.value}</div>
+      <div class="reading-unit">${r.unit}</div>
+    </div>`).join('');
+
+  const timelineHTML = b.events.map(e => `
+    <div class="tl-event event-${e.type}">
+      <div class="tl-dot"></div>
+      <div class="tl-time">${e.time}</div>
+      <div class="tl-title">${e.title}</div>
+      <div class="tl-desc">${e.desc}</div>
+      <div class="tl-tx">tx: ${e.tx}</div>
+    </div>`).join('');
+
+  const memoryHTML = b.openedAt ? `
+    <div class="memory-card">
+      <div class="memory-kicker">Permanent opening memory · recorded on-chain</div>
+      <div class="memory-title">${b.openedAt}</div>
+      <div class="memory-meta">📍 ${b.openedLocation}</div>
+      <div class="memory-note">“${b.openingNote}”</div>
+      <div class="memory-form">
+        <label for="memoryNote">Add your own note to this memory</label>
+        <textarea class="memory-input" id="memoryNote" placeholder="Who was there? What made the bottle special?"></textarea>
+        <button class="btn btn-primary" onclick="saveMemoryNote('${b.id}')">Preserve note on-chain</button>
+      </div>
+    </div>` : `
+    <div class="memory-card">
+      <div class="memory-kicker">Opening memory</div>
+      <div class="memory-title">Still waiting for the cork to pop</div>
+      <div class="memory-meta">When this bottle opens, its time, GPS location, and a note can become a permanent record.</div>
+    </div>`;
+
+  const readingsSection = b.tier === 'premium' ? `
+    <div class="collector-only">Collector Archive · full environmental record</div>
+    <h3 style="font-size:1rem;margin-bottom:.75rem;color:var(--text-muted);">Collector readings</h3>
+    <div class="readings-grid">${readingsHTML}</div>` : `
+    <div class="collector-only" style="color:var(--text-muted);">Detailed environment tracking is reserved for Collector Archive bottles.</div>`;
+
+  body.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-bottle-icon">${b.emoji}</div>
+      <div>
+        <div class="modal-title">${b.name}</div>
+        <div class="modal-subtitle">${b.winery} · Vintage ${b.vintage} · <span class="tier-badge tier-${b.tier}" style="font-size:.75rem;padding:.15rem .5rem;border-radius:4px;">${b.tierLabel}</span></div>
+        <div class="modal-hash">Token ID: ${b.id} · Contract: ${b.hash}</div>
+      </div>
+    </div>
+    ${memoryHTML}
+    ${readingsSection}
+    <h3 style="font-size:1rem;margin-bottom:.75rem;color:var(--text-muted);">On-Chain Event History</h3>
+    <div class="timeline">${timelineHTML}</div>
+  `;
+  overlay.classList.add('active');
+}
+
+function saveMemoryNote(id) {
+  const note = document.getElementById('memoryNote').value.trim();
+  if (!note) {
+    alert('Add a note before preserving this memory.');
+    return;
+  }
+  const bottle = bottles.find(b => b.id === id);
+  bottle.openingNote = `${bottle.openingNote} ${note}`;
+  openModal(bottle);
+  alert('Memory preserved in this prototype. A production version would submit the note hash to the blockchain.');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
