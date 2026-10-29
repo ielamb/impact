@@ -1,0 +1,16 @@
+{
+  "name": "vinchain",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "VinChain bottle timeline and local API",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "npm run build && node --watch dist/server.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0"
+  }
+}

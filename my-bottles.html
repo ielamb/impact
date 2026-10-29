@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VinChain — My Bottles</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+  :root { --wine:#722F37; --wine-light:#9B4D54; --gold:#C9A84C; --bg:#0F0F0F; --bg-card:#1A1A1A; --bg-elevated:#242424; --text:#F0EDE6; --text-muted:#8A857D; --border:#2A2A2A; --green:#4CAF50; --red:#EF5350; --radius:12px; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { min-height:100vh; background:var(--bg); color:var(--text); font-family:Inter,-apple-system,sans-serif; line-height:1.6; }
+  nav { position:fixed; top:0; width:100%; z-index:2; display:flex; justify-content:space-between; align-items:center; padding:.8rem 3rem; background:rgba(15,15,15,.88); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  .logo { color:var(--gold); font:700 1.5rem 'Playfair Display',serif; letter-spacing:1px; }
+  .logo span { color:var(--text); font-weight:400; }
+  .nav-actions { display:flex; align-items:center; gap:.6rem; }
+  .nav-wallet { display:inline-block; background:var(--wine); color:var(--text); border:0; padding:.55rem 1.2rem; border-radius:8px; font-size:.85rem; font-weight:500; text-decoration:none; cursor:pointer; }
+  .nav-wallet:hover { background:var(--wine-light); }
+  main { max-width:1000px; margin:0 auto; padding:8rem 2rem 4rem; }
+  h1, h2 { font-family:'Playfair Display',serif; }
+  h1 { font-size:clamp(2rem,5vw,3.5rem); margin-bottom:.5rem; }
+  .intro { color:var(--text-muted); margin-bottom:2rem; }
+  .claim-panel { display:flex; flex-wrap:wrap; gap:.6rem; padding:1.25rem; margin-bottom:2rem; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); }
+  .claim-panel input { flex:1 1 240px; min-width:180px; background:var(--bg-elevated); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:.7rem .8rem; font:inherit; }
+  button { font:inherit; }
+  .btn { border:0; border-radius:8px; padding:.7rem 1rem; font-weight:600; cursor:pointer; }
+  .btn-primary { background:var(--wine); color:#fff; }
+  .btn-primary:hover { background:var(--wine-light); }
+  .status { flex-basis:100%; color:var(--gold); font-size:.85rem; }
+  .bottles { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem; }
+  .bottle-card { text-align:left; background:var(--bg-card); color:var(--text); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; cursor:pointer; transition:border-color .2s,transform .2s; }
+  .bottle-card:hover, .bottle-card.active { border-color:var(--gold); transform:translateY(-2px); }
+  .bottle-emoji { font-size:2rem; margin-bottom:.5rem; }
+  .bottle-card h2 { font-size:1.25rem; margin-bottom:.25rem; }
+  .bottle-meta, .bottle-id { color:var(--text-muted); font-size:.85rem; }
+  .bottle-state { color:var(--green); font-size:.8rem; margin-top:.8rem; }
+  .modal-overlay { display:none; position:fixed; inset:0; z-index:10; align-items:center; justify-content:center; padding:1.25rem; background:rgba(0,0,0,.78); }
+  .modal-overlay.visible { display:flex; }
+  .memory-panel { width:min(820px, 100%); max-height:90vh; overflow-y:auto; padding:1.5rem; background:var(--bg-card); border:1px solid var(--gold); border-radius:var(--radius); box-shadow:0 24px 80px rgba(0,0,0,.5); position:relative; }
+  .memory-panel h2 { font-size:1.35rem; margin-bottom:.25rem; }
+  .memory-panel p { color:var(--text-muted); font-size:.85rem; margin-bottom:1rem; }
+  .modal-close { position:absolute; top:.8rem; right:.8rem; width:2rem; height:2rem; border:1px solid var(--border); border-radius:50%; background:transparent; color:var(--text-muted); cursor:pointer; font-size:1.1rem; line-height:1; }
+  .modal-close:hover { color:var(--text); border-color:var(--gold); }
+  .memory-panel h2 { padding-right:2.5rem; }
+  .detail-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.75rem; margin:1.25rem 0; }
+  .detail-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:8px; padding:.85rem; }
+  .detail-label { color:var(--text-muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; }
+  .detail-value { margin-top:.2rem; overflow-wrap:anywhere; }
+  .detail-section { margin-top:1.25rem; }
+  .detail-section h3 { font-size:1rem; margin-bottom:.6rem; }
+  .reading-list, .event-list, .provenance-list { display:grid; gap:.55rem; }
+  .reading-row, .event-row, .provenance-row { display:flex; justify-content:space-between; gap:1rem; padding:.65rem 0; border-bottom:1px solid var(--border); font-size:.82rem; }
+  .reading-row span:first-child, .event-row span:first-child, .provenance-row span:first-child { color:var(--text-muted); }
+  .event-row, .provenance-row { display:block; }
+  .event-title { color:var(--text); font-weight:600; }
+  .event-meta { color:var(--text-muted); margin-top:.15rem; overflow-wrap:anywhere; }
+  .memory-record { background:rgba(201,168,76,.08); border:1px solid rgba(201,168,76,.35); border-radius:8px; padding:1rem; }
+  .memory-record strong { display:block; color:var(--gold); margin-bottom:.3rem; }
+  textarea { width:100%; min-height:110px; resize:vertical; background:var(--bg-elevated); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:.75rem; font:inherit; margin-bottom:.75rem; }
+  .empty { color:var(--text-muted); padding:2rem; text-align:center; border:1px dashed var(--border); border-radius:var(--radius); }
+  @media (max-width:600px) { nav { padding:.8rem 1.25rem; } .logo { font-size:1.25rem; } .nav-wallet { padding:.5rem .7rem; } main { padding:7rem 1.25rem 3rem; } }
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/file.html">Vin<span>Chain</span></a>
+  <div class="nav-actions">
+    <a class="nav-wallet" href="/file.html">Timeline</a>
+    <button class="nav-wallet" id="walletButton" type="button">Connect Wallet</button>
+  </div>
+</nav>
+<main>
+  <h1>My bottles</h1>
+  <p class="intro">Add proprietary VinChain bottles to your wallet, then select one to preserve its opening memory.</p>
+  <form class="claim-panel" id="claimForm">
+    <input id="bottleIdInput" required placeholder="Bottle ID (VIN-00482)" aria-label="Bottle ID" />
+    <button class="btn btn-primary" type="submit">Add bottle</button>
+    <div class="status" id="status" role="status">Connect your demo wallet to manage bottles.</div>
+  </form>
+  <div class="bottles" id="bottles"></div>
+  <div class="modal-overlay" id="bottleModal" role="dialog" aria-modal="true" aria-labelledby="memoryTitle">
+    <section class="memory-panel" id="memoryPanel">
+    <button class="modal-close" id="closeBottleModal" type="button" aria-label="Close bottle details">×</button>
+    <h2 id="memoryTitle">Bottle details</h2>
+    <p>The memory will be added to this bottle's provenance history.</p>
+    <div id="bottleDetails"></div>
+    <textarea id="memoryNote" placeholder="Who was there? What made this bottle special?" aria-label="Memory note"></textarea>
+    <button class="btn btn-primary" id="memoryButton" type="button">Record memory</button>
+    </section>
+  </div>
+</main>
+<script>
+const walletKey = 'vinchainDemoWallet';
+let wallet = localStorage.getItem(walletKey) || '';
+let selectedBottle = null;
+const walletButton = document.getElementById('walletButton');
+const status = document.getElementById('status');
+const bottlesContainer = document.getElementById('bottles');
+
+function demoAddress(seed) { return `0x${seed.repeat(40).slice(0, 40)}`; }
+function setWallet() {
+  wallet = wallet || demoAddress('a');
+  localStorage.setItem(walletKey, wallet);
+  walletButton.textContent = `Wallet ${wallet.slice(0, 6)}…${wallet.slice(-4)}`;
+  status.textContent = `Connected demo wallet: ${wallet}`;
+  loadMyBottles();
+}
+async function request(path, options = {}) {
+  const response = await fetch(path, { headers: {'Content-Type':'application/json'}, ...options });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error || `Request failed (${response.status})`);
+  return body;
+}
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[character]));
+}
+function detailCard(label, value) {
+  return `<div class="detail-card"><div class="detail-label">${escapeHtml(label)}</div><div class="detail-value">${escapeHtml(value ?? 'Not recorded')}</div></div>`;
+}
+function renderBottleDetails(bottle) {
+  const readings = (bottle.readings ?? []).map(reading =>
+    `<div class="reading-row"><span>${escapeHtml(reading.label)}</span><strong>${escapeHtml(reading.value)} ${escapeHtml(reading.unit ?? '')}</strong></div>`).join('');
+  const events = (bottle.events ?? []).map(event =>
+    `<div class="event-row"><div class="event-title">${escapeHtml(event.title)}</div><div class="event-meta">${escapeHtml(event.time)} · ${escapeHtml(event.desc)} · ${escapeHtml(event.tx)}</div></div>`).join('');
+  const provenance = (bottle.provenance ?? []).map(record =>
+    `<div class="provenance-row"><div class="event-title">${escapeHtml(record.action)}</div><div class="event-meta">${escapeHtml(record.at)} · ${escapeHtml(record.actor)} · ${escapeHtml(record.tx)}</div></div>`).join('');
+  const memory = bottle.openingNote
+    ? `<div class="memory-record"><strong>Opening memory</strong><div>${escapeHtml(bottle.openingNote)}</div><div class="event-meta">${escapeHtml(bottle.openedAt ?? 'Date not recorded')}${bottle.openedLocation ? ` · ${escapeHtml(bottle.openedLocation)}` : ''}</div></div>`
+    : '<div class="event-meta">No opening memory recorded yet.</div>';
+  document.getElementById('bottleDetails').innerHTML = `
+    <div class="detail-grid">
+      ${detailCard('Bottle ID', bottle.id)}
+      ${detailCard('Vintage', bottle.vintage)}
+      ${detailCard('Winery / region', bottle.winery)}
+      ${detailCard('Token ID', `#${bottle.tokenId}`)}
+      ${detailCard('Status', bottle.status)}
+      ${detailCard('Claim status', bottle.claimStatus)}
+      ${detailCard('Product type', bottle.productType)}
+      ${detailCard('Purchase status', bottle.purchaseStatus)}
+      ${detailCard('Collection tier', bottle.tierLabel ?? bottle.tier)}
+      ${detailCard('Owner', bottle.owner)}
+      ${detailCard('Bottle hash', bottle.hash)}
+    </div>
+    <div class="detail-section"><h3>Opening memory</h3>${memory}</div>
+    <div class="detail-section"><h3>Sensor readings</h3><div class="reading-list">${readings || '<div class="event-meta">No readings recorded.</div>'}</div></div>
+    <div class="detail-section"><h3>Event history</h3><div class="event-list">${events || '<div class="event-meta">No events recorded.</div>'}</div></div>
+    <div class="detail-section"><h3>Provenance</h3><div class="provenance-list">${provenance || '<div class="event-meta">No provenance records recorded.</div>'}</div></div>`;
+}
+async function loadMyBottles() {
+  if (!wallet) { bottlesContainer.innerHTML = '<div class="empty">Connect your wallet to see your bottles.</div>'; return; }
+  try {
+    const allBottles = await request('/api/bottles');
+    const owned = allBottles.filter(bottle => bottle.owner?.toLowerCase() === wallet.toLowerCase());
+    bottlesContainer.innerHTML = owned.length ? owned.map(bottle => `
+      <button class="bottle-card${selectedBottle?.id === bottle.id ? ' active' : ''}" type="button" data-id="${escapeHtml(bottle.id)}">
+        <div class="bottle-emoji">${escapeHtml(bottle.emoji)}</div>
+        <h2>${escapeHtml(bottle.name)}</h2>
+        <div class="bottle-meta">${escapeHtml(bottle.winery)}</div>
+        <div class="bottle-id">${escapeHtml(bottle.id)} · Token #${escapeHtml(bottle.tokenId)}</div>
+        <div class="bottle-state">${bottle.openedAt ? 'Memory recorded' : 'Ready for an opening memory'}</div>
+      </button>`).join('') : '<div class="empty">No bottles are connected to this wallet yet. Add one with its bottle ID above.</div>';
+    bottlesContainer.querySelectorAll('.bottle-card').forEach(card => card.addEventListener('click', () => selectBottle(card.dataset.id, allBottles)));
+  } catch (error) { status.textContent = error.message; }
+}
+function selectBottle(id, allBottles) {
+  selectedBottle = allBottles.find(bottle => bottle.id === id);
+  if (!selectedBottle) return;
+  document.getElementById('memoryTitle').textContent = selectedBottle.name;
+  renderBottleDetails(selectedBottle);
+  document.getElementById('bottleModal').classList.add('visible');
+  loadMyBottles();
+}
+document.getElementById('claimForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (!wallet) { setWallet(); }
+  const bottleId = document.getElementById('bottleIdInput').value.trim().toUpperCase();
+  if (!bottleId) return;
+  try {
+    const bottle = await request(`/api/bottles/${encodeURIComponent(bottleId)}/claim`, { method:'POST', body:JSON.stringify({walletAddress:wallet}) });
+    document.getElementById('bottleIdInput').value = '';
+    status.textContent = `Added ${bottle.name} to your wallet. Select it below to record a memory.`;
+    await loadMyBottles();
+  } catch (error) { status.textContent = error.message; }
+});
+document.getElementById('memoryButton').addEventListener('click', async () => {
+  const note = document.getElementById('memoryNote').value.trim();
+  if (!selectedBottle) return;
+  if (!note) { status.textContent = 'Write a memory before recording it.'; return; }
+  try {
+    selectedBottle = await request(`/api/bottles/${encodeURIComponent(selectedBottle.id)}/memories`, { method:'POST', body:JSON.stringify({note, openedAt:new Date().toISOString()}) });
+    status.textContent = `Opening memory recorded for ${selectedBottle.name}.`;
+    document.getElementById('memoryNote').value = '';
+    renderBottleDetails(selectedBottle);
+    await loadMyBottles();
+  } catch (error) { status.textContent = error.message; }
+});
+walletButton.addEventListener('click', setWallet);
+document.getElementById('closeBottleModal').addEventListener('click', () => {
+  document.getElementById('bottleModal').classList.remove('visible');
+});
+document.getElementById('bottleModal').addEventListener('click', event => {
+  if (event.target === event.currentTarget) event.currentTarget.classList.remove('visible');
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') document.getElementById('bottleModal').classList.remove('visible');
+});
+if (wallet) setWallet(); else loadMyBottles();
+</script>
+</body>
+</html>

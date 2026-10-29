@@ -1,0 +1,323 @@
+[
+  {
+    "id": "VIN-00482",
+    "name": "Château Margaux 2018",
+    "winery": "Château Margaux · Bordeaux",
+    "vintage": 2018,
+    "tier": "premium",
+    "tierLabel": "Collector sensor",
+    "status": "opened",
+    "emoji": "🍷",
+    "hash": "0x7a3f1c9e482b…d8e91b",
+    "readings": [
+      {
+        "label": "Temperature",
+        "value": "14.2",
+        "unit": "°C",
+        "state": "ok"
+      },
+      {
+        "label": "Humidity",
+        "value": "68",
+        "unit": "%",
+        "state": "ok"
+      },
+      {
+        "label": "Seal",
+        "value": "OK",
+        "unit": "",
+        "state": "ok"
+      }
+    ],
+    "events": [
+      {
+        "time": "2026-10-29T17:34:39.674Z",
+        "title": "Bottle opened",
+        "desc": "Opening memory recorded",
+        "type": "warn",
+        "tx": "local-60e48e00-8699-46be-be27-06462d37bf5c",
+        "verified": true
+      },
+      {
+        "time": "2026-10-29T17:34:06.149Z",
+        "title": "Bottle opened",
+        "desc": "Opening memory recorded",
+        "type": "warn",
+        "tx": "local-736d9bda-d1ee-43a0-825a-e89fa56f4efa",
+        "verified": true
+      },
+      {
+        "time": "2026-10-29T17:21:56.698Z",
+        "title": "Bottle opened",
+        "desc": "Opening memory recorded",
+        "type": "warn",
+        "tx": "local-8670153c-ac63-4fe6-9578-a3e262dbf22d",
+        "verified": true
+      },
+      {
+        "time": "2026-10-29T17:21:46.499Z",
+        "title": "NFT claimed",
+        "desc": "Token #1001 minted to 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "type": "good",
+        "tx": "demo-e94f80d5-528f-43fa-b58c-f2516c9e18e9",
+        "verified": true
+      },
+      {
+        "time": "Oct 27, 2026 · 14:22",
+        "title": "Environment check",
+        "desc": "Temp 14.2°C · Humidity 68%",
+        "type": "info",
+        "tx": "0xab12…f482"
+      },
+      {
+        "time": "Sep 30, 2026 · 08:00",
+        "title": "Bottled & sealed",
+        "desc": "Sensor activated · FullSpectrum tier registered",
+        "type": "good",
+        "tx": "0x1234…0930"
+      }
+    ],
+    "productType": "proprietary",
+    "tokenId": "1001",
+    "purchaseStatus": "purchased",
+    "claimStatus": "claimed",
+    "provenance": [
+      {
+        "action": "claimed",
+        "actor": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "tx": "demo-e94f80d5-528f-43fa-b58c-f2516c9e18e9",
+        "at": "2026-10-29T17:21:46.500Z"
+      },
+      {
+        "action": "opened",
+        "actor": "memory-holder",
+        "tx": "local-8670153c-ac63-4fe6-9578-a3e262dbf22d",
+        "at": "2026-10-29T17:21:56.698Z"
+      },
+      {
+        "action": "opened",
+        "actor": "memory-holder",
+        "tx": "local-736d9bda-d1ee-43a0-825a-e89fa56f4efa",
+        "at": "2026-10-29T17:34:06.149Z"
+      },
+      {
+        "action": "opened",
+        "actor": "memory-holder",
+        "tx": "local-60e48e00-8699-46be-be27-06462d37bf5c",
+        "at": "2026-10-29T17:34:39.674Z"
+      }
+    ],
+    "owner": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "openedAt": "2026-10-29T17:34:39.674Z",
+    "openingNote": "me"
+  },
+  {
+    "id": "VIN-01055",
+    "name": "Opus One 2019",
+    "winery": "Opus One · Napa Valley",
+    "vintage": 2019,
+    "tier": "plus",
+    "tierLabel": "Collector sensor",
+    "status": "alert",
+    "emoji": "🍷",
+    "hash": "0x92c4d1ab73…5f10e2",
+    "readings": [
+      {
+        "label": "Seal",
+        "value": "WARN",
+        "unit": "",
+        "state": "warn"
+      },
+      {
+        "label": "Tilt",
+        "value": "34.7",
+        "unit": "°",
+        "state": "danger"
+      }
+    ],
+    "events": [
+      {
+        "time": "Oct 27, 2026 · 22:04",
+        "title": "⚠ Tamper detected",
+        "desc": "Seal integrity compromised",
+        "type": "bad",
+        "tx": "0xfa82…2204"
+      },
+      {
+        "time": "Aug 12, 2026 · 10:00",
+        "title": "Bottled & sealed",
+        "desc": "Sensor activated · GuardCork tier registered",
+        "type": "good",
+        "tx": "0x5678…0812"
+      }
+    ],
+    "productType": "proprietary",
+    "tokenId": "1002",
+    "purchaseStatus": "purchased",
+    "claimStatus": "unclaimed",
+    "provenance": []
+  },
+  {
+    "id": "VIN-02198",
+    "name": "Penfolds Grange 2017",
+    "winery": "Penfolds · South Australia",
+    "vintage": 2017,
+    "tier": "basic",
+    "tierLabel": "VinChain wine",
+    "status": "opened",
+    "emoji": "🍷",
+    "hash": "0x3e8b0f14a7…c299d4",
+    "openedAt": "2026-10-26T20:15:00.000Z",
+    "openedLocation": "The Harbour Room, Sydney · 33.8688°S 151.2093°E",
+    "openingNote": "A toast to the end of a long project — shared with the people who made it possible.",
+    "readings": [
+      {
+        "label": "Seal",
+        "value": "OPEN",
+        "unit": "",
+        "state": "warn"
+      }
+    ],
+    "events": [
+      {
+        "time": "Oct 26, 2026 · 20:15",
+        "title": "Bottle opened",
+        "desc": "Seal broken — GPS pinned at The Harbour Room, Sydney",
+        "type": "warn",
+        "tx": "0xcc11…2015"
+      },
+      {
+        "time": "Jun 01, 2026 · 14:00",
+        "title": "Bottled & sealed",
+        "desc": "Sensor activated · SealWatch tier registered",
+        "type": "good",
+        "tx": "0x9abc…0601"
+      }
+    ],
+    "productType": "proprietary",
+    "tokenId": "1003",
+    "purchaseStatus": "purchased",
+    "claimStatus": "unclaimed",
+    "provenance": []
+  },
+  {
+    "id": "VIN-03371",
+    "name": "Sassicaia 2020",
+    "winery": "Tenuta San Guido · Tuscany",
+    "vintage": 2020,
+    "tier": "premium",
+    "tierLabel": "Collector sensor",
+    "status": "sealed",
+    "emoji": "🍷",
+    "hash": "0x11df44ca82…e7b301",
+    "readings": [
+      {
+        "label": "Seal",
+        "value": "OK",
+        "unit": "",
+        "state": "ok"
+      }
+    ],
+    "events": [
+      {
+        "time": "Oct 28, 2026 · 06:00",
+        "title": "Environment check",
+        "desc": "Temp 15.8°C · Humidity 72%",
+        "type": "info",
+        "tx": "0xaa00…0600"
+      },
+      {
+        "time": "Oct 10, 2026 · 09:30",
+        "title": "Bottled & sealed",
+        "desc": "Sensor activated · FullSpectrum tier registered",
+        "type": "good",
+        "tx": "0xcc22…0930"
+      }
+    ],
+    "productType": "proprietary",
+    "tokenId": "1004",
+    "purchaseStatus": "purchased",
+    "claimStatus": "unclaimed",
+    "provenance": []
+  },
+  {
+    "id": "VIN-04450",
+    "name": "Vega Sicilia Único 2015",
+    "winery": "Vega Sicilia · Ribera del Duero",
+    "vintage": 2015,
+    "tier": "plus",
+    "tierLabel": "Collector sensor",
+    "status": "sealed",
+    "emoji": "🍷",
+    "hash": "0x58ef0b239c…14ad77",
+    "readings": [
+      {
+        "label": "Seal",
+        "value": "OK",
+        "unit": "",
+        "state": "ok"
+      }
+    ],
+    "events": [
+      {
+        "time": "Oct 27, 2026 · 18:00",
+        "title": "Integrity check passed",
+        "desc": "Seal intact · No anomalies",
+        "type": "good",
+        "tx": "0xdd33…1800"
+      },
+      {
+        "time": "Jul 15, 2026 · 10:00",
+        "title": "Bottled & sealed",
+        "desc": "Sensor activated · GuardCork tier registered",
+        "type": "good",
+        "tx": "0xee44…0715"
+      }
+    ],
+    "productType": "proprietary",
+    "tokenId": "1005",
+    "purchaseStatus": "purchased",
+    "claimStatus": "unclaimed",
+    "provenance": []
+  },
+  {
+    "id": "VIN-05612",
+    "name": "Dom Pérignon 2012",
+    "winery": "Moët & Chandon · Champagne",
+    "vintage": 2012,
+    "tier": "premium",
+    "tierLabel": "Collector sensor",
+    "status": "sealed",
+    "emoji": "🥂",
+    "hash": "0xc4a019de72…88f105",
+    "readings": [
+      {
+        "label": "Seal",
+        "value": "OK",
+        "unit": "",
+        "state": "ok"
+      }
+    ],
+    "events": [
+      {
+        "time": "Oct 28, 2026 · 07:30",
+        "title": "Environment check",
+        "desc": "Temp 10.1°C · Humidity 80%",
+        "type": "info",
+        "tx": "0xff55…0730"
+      },
+      {
+        "time": "Mar 01, 2026 · 09:00",
+        "title": "Bottled & sealed",
+        "desc": "Sensor activated · FullSpectrum tier registered",
+        "type": "good",
+        "tx": "0x1177…0301"
+      }
+    ],
+    "productType": "proprietary",
+    "tokenId": "1006",
+    "purchaseStatus": "purchased",
+    "claimStatus": "unclaimed",
+    "provenance": []
+  }
+]

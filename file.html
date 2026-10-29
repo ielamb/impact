@@ -77,6 +77,8 @@
     transition: background .2s;
   }
   .nav-wallet:hover { background: var(--wine-light); }
+  .nav-actions { display: flex; align-items: center; gap: .6rem; }
+  .my-bottles-link { display: none; }
 
   /* ── INTRO ── */
   .intro {
@@ -128,28 +130,49 @@
   }
   .section-sub { color: var(--text-muted); margin-bottom: 3rem; font-size: 1rem; }
 
-  /* ── SENSOR TIERS ── */
-  .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-  .tier-card {
+  /* ── SHOP ── */
+  .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .shop-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 2rem;
-    position: relative; overflow: hidden; transition: border-color .3s;
+    position: relative; overflow: hidden; transition: border-color .3s, transform .2s;
   }
-  .tier-card:hover { border-color: var(--wine-light); }
-  .tier-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .tier-name {
+  .shop-card:hover { border-color: var(--wine-light); transform: translateY(-3px); }
+  .shop-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .shop-name {
     font-family: 'Playfair Display', serif;
     font-size: 1.4rem; margin-bottom: .25rem;
   }
-  .tier-price { color: var(--gold); font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
-  .tier-features { list-style: none; }
-  .tier-features li {
+  .shop-price { color: var(--gold); font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+  .shop-description { color: var(--text-muted); font-size: .9rem; margin-bottom: 1rem; }
+  .shop-features { list-style: none; margin-bottom: 1.5rem; }
+  .shop-features li {
     padding: .4rem 0; font-size: .9rem; color: var(--text-muted);
     display: flex; align-items: center; gap: .5rem;
   }
-  .tier-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
-  .tier-features li.disabled { opacity: .35; }
-  .tier-features li.disabled::before { content: '—'; color: var(--text-muted); }
+  .shop-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+  .shop-card .btn { padding: .6rem 1rem; font-size: .85rem; }
+  .demo-flow {
+    display: none;
+    margin-top: 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .demo-flow h3 { font-size: 1rem; margin-bottom: .35rem; }
+  .demo-flow p { color: var(--text-muted); font-size: .85rem; margin-bottom: 1rem; }
+  .demo-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .demo-actions input {
+    flex: 1 1 220px;
+    min-width: 180px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: .6rem .75rem;
+  }
+  .demo-status { color: var(--gold); font-size: .8rem; margin-top: .8rem; white-space: pre-wrap; }
 
   .status-dot {
     width: 7px; height: 7px; border-radius: 50%;
@@ -385,14 +408,6 @@
   }
   .search-input:focus { border-color: var(--wine-light); }
   .search-input::placeholder { color: var(--text-muted); }
-  .filter-btn {
-    background: var(--bg-elevated); border: 1px solid var(--border);
-    border-radius: 10px; padding: .5rem 1rem;
-    color: var(--text-muted); font-size: .85rem; cursor: pointer;
-    transition: all .2s;
-  }
-  .filter-btn:hover, .filter-btn.active { border-color: var(--gold); color: var(--gold); }
-
   /* ── FOOTER ── */
   footer {
     text-align: center; padding: 3rem;
@@ -428,7 +443,10 @@
 <nav>
   <div class="logo">Vin<span>Chain</span></div>
   <input class="nav-search" id="searchInput" type="search" aria-label="Search bottles" placeholder="Search bottles…" />
-  <button class="nav-wallet" onclick="alert('Wallet connection coming soon — this is a prototype!')">Connect Wallet</button>
+  <div class="nav-actions">
+    <a class="nav-wallet my-bottles-link" id="myBottlesLink" href="/my-bottles.html">My bottles</a>
+    <button class="nav-wallet" id="walletButton" onclick="connectWallet()">Connect Wallet</button>
+  </div>
 </nav>
 
 <!-- ═══════ INTRO ═══════ -->
@@ -447,50 +465,37 @@
   </div>
 </section>
 
-<!-- ═══════ SENSOR TIERS ═══════ -->
-<section id="tiers-section">
-  <h2 class="section-title">Choose the level of detail</h2>
-  <p class="section-sub">Every bottle gets a memory. Add protection and environmental history when you need it.</p>
-  <div class="tiers">
-    <!-- Basic -->
-    <div class="tier-card">
-      <div class="tier-icon">🥉</div>
-      <div class="tier-name">Memory</div>
-      <div class="tier-price">For every bottle</div>
-      <ul class="tier-features">
-        <li>Opening timestamp on-chain</li>
-        <li>Personal note and occasion</li>
-        <li>Opening GPS location</li>
-        <li>Shareable memory page</li>
-        <li class="disabled">Continuous environment trail</li>
+<!-- ═══════ SHOP ═══════ -->
+<section id="shop">
+  <h2 class="section-title">Bring provenance home</h2>
+  <p class="section-sub">Choose a VinChain bottle with its memory seal, or add collector-grade sensing to a bottle you already own.</p>
+  <div class="shop-grid">
+    <article class="shop-card">
+      <div class="shop-icon">🍷</div>
+      <div class="shop-name">VinChain wine</div>
+      <div class="shop-price">Our wine · blockchain registered</div>
+      <p class="shop-description">Every bottle we make is uploaded to the blockchain before it leaves us, giving its story a permanent starting point.</p>
+      <ul class="shop-features">
+        <li>Memory seal included</li>
+        <li>On-chain bottle record</li>
+        <li>Opening memory ready</li>
+        <li>Shareable provenance</li>
       </ul>
-    </div>
-    <!-- Plus -->
-    <div class="tier-card">
-      <div class="tier-icon">🥈</div>
-      <div class="tier-name">Protection</div>
-      <div class="tier-price">For valuable bottles</div>
-      <ul class="tier-features">
-        <li>Everything in Memory</li>
-        <li>Tamper & tilt detection</li>
-        <li>Seal integrity alerts</li>
-        <li>Custody transfers</li>
-        <li class="disabled">Temperature and humidity history</li>
+      <button class="btn btn-primary" type="button" onclick="alert('Wine shop coming soon.')">Shop our wine</button>
+    </article>
+    <article class="shop-card">
+      <div class="shop-icon">◉</div>
+      <div class="shop-name">Collector sensor</div>
+      <div class="shop-price">For bottles you already own</div>
+      <p class="shop-description">Attach the sensor to your own bottle to capture the extra detail that protects its value and provenance.</p>
+      <ul class="shop-features">
+        <li>Temperature and humidity tracking</li>
+        <li>Tilt and tamper alerts</li>
+        <li>Custody and location history</li>
+        <li>Collector-grade event record</li>
       </ul>
-    </div>
-    <!-- Premium -->
-    <div class="tier-card">
-      <div class="tier-icon">🥇</div>
-      <div class="tier-name">Collector Archive</div>
-      <div class="tier-price">For serious bottles</div>
-      <ul class="tier-features">
-        <li>Everything in Protection</li>
-        <li>Temperature, humidity, light, vibration</li>
-        <li>Full GPS and custody trail</li>
-        <li>Collector-grade provenance archive</li>
-        <li>Detailed opening memory history</li>
-      </ul>
-    </div>
+      <button class="btn btn-outline" type="button" onclick="alert('Collector sensor shop coming soon.')">Shop the sensor</button>
+    </article>
   </div>
 </section>
 
@@ -511,14 +516,14 @@
 <!-- ═══════════════════════ JS ═══════════════════════ -->
 <script>
 // ── MOCK DATA ──
-const bottles = [
+let bottles = [
   {
     id: "VIN-00482",
     name: "Château Margaux 2018",
     winery: "Château Margaux · Bordeaux",
     vintage: 2018,
     tier: "premium",
-    tierLabel: "Collector Archive",
+    tierLabel: "Collector sensor",
     status: "sealed",
     emoji: "🍷",
     hash: "0x7a3f1c9e482b…d8e91b",
@@ -543,7 +548,7 @@ const bottles = [
     winery: "Opus One · Napa Valley",
     vintage: 2019,
     tier: "plus",
-    tierLabel: "Protection",
+    tierLabel: "Collector sensor",
     status: "alert",
     emoji: "🍷",
     hash: "0x92c4d1ab73…5f10e2",
@@ -565,7 +570,7 @@ const bottles = [
     winery: "Penfolds · South Australia",
     vintage: 2017,
     tier: "basic",
-    tierLabel: "Memory",
+    tierLabel: "VinChain wine",
     status: "opened",
     emoji: "🍷",
     hash: "0x3e8b0f14a7…c299d4",
@@ -586,7 +591,7 @@ const bottles = [
     winery: "Tenuta San Guido · Tuscany",
     vintage: 2020,
     tier: "premium",
-    tierLabel: "Collector Archive",
+    tierLabel: "Collector sensor",
     status: "sealed",
     emoji: "🍷",
     hash: "0x11df44ca82…e7b301",
@@ -610,7 +615,7 @@ const bottles = [
     winery: "Vega Sicilia · Ribera del Duero",
     vintage: 2015,
     tier: "plus",
-    tierLabel: "Protection",
+    tierLabel: "Collector sensor",
     status: "sealed",
     emoji: "🍷",
     hash: "0x58ef0b239c…14ad77",
@@ -630,7 +635,7 @@ const bottles = [
     winery: "Moët & Chandon · Champagne",
     vintage: 2012,
     tier: "premium",
-    tierLabel: "Collector Archive",
+    tierLabel: "Collector sensor",
     status: "sealed",
     emoji: "🥂",
     hash: "0xc4a019de72…88f105",
@@ -649,16 +654,51 @@ const bottles = [
     ]
   }
 ];
+let currentWallet = localStorage.getItem('vinchainDemoWallet') || '';
+
+function demoAddress(seed) {
+  return `0x${seed.repeat(40).slice(0, 40)}`;
+}
+
+async function apiRequest(path, options = {}) {
+  const response = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...options });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error || `Request failed (${response.status})`);
+  return body;
+}
+
+function connectWallet() {
+  currentWallet = currentWallet || demoAddress('a');
+  localStorage.setItem('vinchainDemoWallet', currentWallet);
+  document.getElementById('walletButton').textContent = `Wallet ${currentWallet.slice(0, 6)}…${currentWallet.slice(-4)}`;
+  document.getElementById('myBottlesLink').style.display = 'inline-block';
+}
+
+async function loadBottlesFromApi() {
+  try {
+    const response = await fetch('/api/bottles');
+    if (!response.ok) throw new Error(`Bottle request failed (${response.status})`);
+    const remoteBottles = await response.json();
+    if (!Array.isArray(remoteBottles)) throw new Error('Bottle response was not a list');
+    bottles = remoteBottles;
+    renderTimeline();
+    if (currentWallet) {
+      document.getElementById('walletButton').textContent = `Wallet ${currentWallet.slice(0, 6)}…${currentWallet.slice(-4)}`;
+      document.getElementById('myBottlesLink').style.display = 'inline-block';
+    }
+  } catch (error) {
+    console.warn('Using local prototype data:', error);
+  }
+}
 
 // ── BOTTLE TIMELINE ──
 const openingTimeline = document.getElementById('openingTimeline');
-const timelineBottles = [...bottles].sort((a, b) => {
-  const latest = bottle => bottle.openedAt || bottle.events[0]?.time || '';
-  return new Date(latest(b).replace('·', '')).getTime() - new Date(latest(a).replace('·', '')).getTime();
-});
-
 function renderTimeline(searchTerm = '') {
   openingTimeline.innerHTML = '';
+  const timelineBottles = [...bottles].sort((a, b) => {
+    const latest = bottle => bottle.openedAt || bottle.events[0]?.time || '';
+    return new Date(latest(b).replace('·', '')).getTime() - new Date(latest(a).replace('·', '')).getTime();
+  });
   const filtered = timelineBottles.filter(b => {
     const haystack = `${b.id} ${b.name} ${b.winery} ${b.vintage} ${b.openingNote || ''}`.toLowerCase();
     return haystack.includes(searchTerm);
@@ -674,7 +714,9 @@ function renderTimeline(searchTerm = '') {
   event.className = 'opening-event animate';
   event.style.animationDelay = `${i * 0.1}s`;
   event.onclick = () => openModal(b);
-  const date = b.openedAt || b.events[0]?.time || 'No date recorded';
+  const date = b.openedAt
+    ? (b.openedAt.includes('T') ? new Date(b.openedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : b.openedAt)
+    : b.events[0]?.time || 'No date recorded';
   const location = b.openedLocation || 'In collection · opening not yet recorded';
   event.innerHTML = `
     <div class="opening-event-marker">${b.emoji}</div>
@@ -720,13 +762,8 @@ function openModal(b) {
     <div class="memory-card">
       <div class="memory-kicker">Permanent opening memory · recorded on-chain</div>
       <div class="memory-title">${b.openedAt}</div>
-      <div class="memory-meta">📍 ${b.openedLocation}</div>
+      ${b.openedLocation ? `<div class="memory-meta">📍 ${b.openedLocation}</div>` : ''}
       <div class="memory-note">“${b.openingNote}”</div>
-      <div class="memory-form">
-        <label for="memoryNote">Add your own note to this memory</label>
-        <textarea class="memory-input" id="memoryNote" placeholder="Who was there? What made the bottle special?"></textarea>
-        <button class="btn btn-primary" onclick="saveMemoryNote('${b.id}')">Preserve note on-chain</button>
-      </div>
     </div>` : `
     <div class="memory-card">
       <div class="memory-kicker">Opening memory</div>
@@ -757,16 +794,28 @@ function openModal(b) {
   overlay.classList.add('active');
 }
 
-function saveMemoryNote(id) {
+async function saveMemoryNote(id) {
   const note = document.getElementById('memoryNote').value.trim();
   if (!note) {
     alert('Add a note before preserving this memory.');
     return;
   }
-  const bottle = bottles.find(b => b.id === id);
-  bottle.openingNote = `${bottle.openingNote} ${note}`;
-  openModal(bottle);
-  alert('Memory preserved in this prototype. A production version would submit the note hash to the blockchain.');
+  try {
+    const response = await fetch(`/api/bottles/${encodeURIComponent(id)}/memories`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ note, openedAt: new Date().toISOString() })
+    });
+    if (!response.ok) throw new Error(`Memory request failed (${response.status})`);
+    const updatedBottle = await response.json();
+    const index = bottles.findIndex(b => b.id === id);
+    if (index >= 0) bottles[index] = updatedBottle;
+    renderTimeline();
+    openModal(updatedBottle);
+  } catch (error) {
+    console.error(error);
+    alert('The memory could not be saved. Please try again.');
+  }
 }
 
 function closeModal() {
@@ -776,6 +825,7 @@ document.getElementById('modalOverlay').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeModal();
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+loadBottlesFromApi();
 </script>
 </body>
 </html>
